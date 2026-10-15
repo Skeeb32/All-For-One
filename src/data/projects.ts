@@ -30,3 +30,8 @@ export const personalNavigation = [
   { label: 'Settings', to: '/settings', icon: Workflow },
   { label: 'Contact', to: '/contact', icon: Bot },
 ]
+
+export const learningNavigation = [
+  { label: 'Site assistant', to: '/assistant', icon: Bot },
+  { label: 'Enterprise AI guide', to: '/guides/enterprise-ai-chatbots', icon: FlaskConical },
+]

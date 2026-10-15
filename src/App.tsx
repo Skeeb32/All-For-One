@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
 import { NavLink, Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom'
 import {
-  Activity, ArrowRight, ArrowUpRight, Bell, Check, ChevronDown,
+  Activity, ArrowRight, ArrowUpRight, Bell, Bot, Check, ChevronDown,
   ChevronLeft, Command, Github, GitBranch, Menu, Moon, Search, Settings2,
   Sun, X,
 } from 'lucide-react'
-import { mainNavigation, personalNavigation, projectBySlug, projects } from './data/projects'
+import { learningNavigation, mainNavigation, personalNavigation, projectBySlug, projects } from './data/projects'
+import AssistantPage from './pages/AssistantPage'
+import EnterpriseGuidePage from './pages/EnterpriseGuidePage'
 
 type Theme = 'dark' | 'light'
 
@@ -41,7 +43,7 @@ function App() {
     return !current
   })
 
-  const allNav = [...mainNavigation, ...projects.map((project) => ({ label: project.navTitle, to: `/projects/${project.slug}`, icon: project.icon })), ...personalNavigation]
+  const allNav = [...mainNavigation, ...projects.map((project) => ({ label: project.navTitle, to: `/projects/${project.slug}`, icon: project.icon })), ...learningNavigation, ...personalNavigation]
   const pageTitle = location.pathname === '/' ? 'Home' : allNav.find((item) => item.to === location.pathname)?.label ?? 'Workspace'
 
   return <div className={`app-frame ${collapsed ? 'is-collapsed' : ''}`}>
@@ -63,6 +65,7 @@ function App() {
       <nav className="side-nav">
         <NavSection label="Workspace" items={mainNavigation} />
         <NavSection label="Developer tools" items={projects.map((project) => ({ label: project.navTitle, to: `/projects/${project.slug}`, icon: project.icon }))} />
+        <NavSection label="Learn & explore" items={learningNavigation} />
         <NavSection label="Personal" items={personalNavigation} />
       </nav>
       <div className="sidebar-bottom">
@@ -89,6 +92,8 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/projects" element={<ProjectsPage />} />
         <Route path="/projects/:slug" element={<ProjectPage />} />
+        <Route path="/assistant" element={<AssistantPage />} />
+        <Route path="/guides/enterprise-ai-chatbots" element={<EnterpriseGuidePage />} />
         <Route path="/overview" element={<OverviewPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/activity" element={<ActivityPage />} />
@@ -144,6 +149,7 @@ function HomePage() {
       <div className="about-card panel"><Eyebrow>A NOTE FROM THE BUILDER</Eyebrow><h2>Software should<br />feel <em>considered.</em></h2><p>This space is a work in progress: a place to explore ideas in developer tooling, data, AI, and the small details that make software useful.</p><button className="text-button" onClick={() => navigate('/about')}>A little more about me <ArrowRight size={15} /></button></div>
       <div className="stack-card panel"><div className="stack-card-top"><div><Eyebrow>THE TOOLBOX</Eyebrow><h2>Tools of the trade</h2></div><span className="stack-orbit">✳</span></div><div className="skill-list">{['TypeScript', 'React', 'Python', 'PostgreSQL', 'Node.js', 'GitHub Actions', 'FastAPI', 'Data visualization'].map((skill, i) => <span className="skill-pill" key={skill}><i className={`skill-dot skill-${i % 4}`} />{skill}</span>)}</div><p className="demo-caption"><span className="demo-dot" />Editable skills overview · sample content</p></div>
     </section>
+    <section className="assistant-home-link"><span className="assistant-home-icon"><Bot size={17} /></span><div><strong>Need a quick tour?</strong><span>Ask the site guide about the projects, roadmap, setup, or enterprise chatbot tutorial.</span></div><button className="text-button" onClick={() => navigate('/assistant')}>Ask the guide <ArrowRight size={14} /></button></section>
     <section className="github-strip"><div className="github-icon"><Github size={20} /></div><div><strong>Built in the open, one piece at a time.</strong><span>The source repository will be linked here when it’s published.</span></div><span className="github-status"><i />IN DEVELOPMENT</span></section>
   </div>
 }
@@ -221,6 +227,7 @@ function SearchDialog({ onClose, onNavigate }: { onClose: () => void; onNavigate
       { label: 'Overview', detail: 'Workspace', to: '/overview', icon: GitBranch },
       { label: 'All projects', detail: 'Workspace', to: '/projects', icon: GitBranch },
       ...projects.map((project) => ({ label: project.navTitle, detail: project.category, to: `/projects/${project.slug}`, icon: project.icon })),
+      ...learningNavigation.map((page) => ({ label: page.label, detail: 'Learn & explore', to: page.to, icon: page.icon })),
       ...personalNavigation.map((page) => ({ label: page.label, detail: 'Personal', to: page.to, icon: page.icon })),
     ]
     return items.filter((item) => `${item.label} ${item.detail}`.toLowerCase().includes(query.toLowerCase().trim())).slice(0, 8)

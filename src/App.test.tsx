@@ -43,4 +43,21 @@ describe('All For One Stage 1 shell', () => {
     expect(document.documentElement).toHaveAttribute('data-theme', 'light')
     expect(localStorage.getItem('afo-theme')).toBe('light')
   })
+
+  it('answers a site question in labeled local guide mode', async () => {
+    const user = userEvent.setup()
+    renderApp('/assistant')
+    expect(await screen.findByText('LOCAL SITE GUIDE')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: /what projects are included/i }))
+    const conversation = within(screen.getByRole('log'))
+    expect(await conversation.findByText(/Developer Analytics Dashboard/)).toBeInTheDocument()
+    expect(conversation.getByText(/Stage 1 route briefs/)).toBeInTheDocument()
+  })
+
+  it('renders the enterprise chatbot tutorial with linked primary sources', () => {
+    renderApp('/guides/enterprise-ai-chatbots')
+    expect(screen.getByRole('heading', { name: /build an ai chatbot/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /make identity part of the data path/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /owasp genai llm top 10 for 2026/i })).toHaveAttribute('href', 'https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/')
+  })
 })

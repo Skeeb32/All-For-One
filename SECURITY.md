@@ -2,9 +2,9 @@
 
 ## Stage 1 scope
 
-The current application is a static client-side foundation. It has no authentication, server, database, uploads, external API requests, or authorization model. The theme preference is stored in the current browser's local storage. Search filters a fixed in-memory page catalog.
+The project pages are static route briefs. The site assistant has a local guide mode and an optional server-side Responses API handler. It has no user authentication, database, file uploads, or enterprise document store. The theme preference is stored in the current browser's local storage. Search and the local assistant use a fixed in-memory site catalog.
 
-Do not treat a future integration as secure until it has a server-side design, input validation, access-control review, secret-management plan, and tests. Never put private credentials in `VITE_*` variables or browser bundles. The API Workbench must not become an unrestricted server-side proxy; the document assistant must not invent citations; finance demos must not request bank credentials.
+The chat handler is disabled unless `OPENAI_CHAT_ENABLED=true` and both server-side provider settings are present. When enabled, it validates same-origin requests, JSON content type, body size, message roles/count/length, applies an output token cap, and does not store response state. It does not provide identity-based quotas or robust distributed rate limiting. A public model-backed deployment must add provider or edge quotas and budget alerts; add authentication when data or audience requires it. Never put credentials in `VITE_*` variables or browser bundles. The API Workbench must not become an unrestricted server-side proxy; the document assistant must not invent citations; finance demos must not request bank credentials.
 
 ## Reporting a vulnerability
 
