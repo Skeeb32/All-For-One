@@ -10,6 +10,7 @@ import AssistantPage from './pages/AssistantPage'
 import EnterpriseGuidePage from './pages/EnterpriseGuidePage'
 
 type Theme = 'dark' | 'light'
+const repositoryUrl = 'https://github.com/Skeeb32/All-For-One'
 
 function useTheme() {
   const [theme, setTheme] = useState<Theme>(() => (localStorage.getItem('afo-theme') as Theme) || 'dark')
@@ -45,8 +46,10 @@ function App() {
 
   const allNav = [...mainNavigation, ...projects.map((project) => ({ label: project.navTitle, to: `/projects/${project.slug}`, icon: project.icon })), ...learningNavigation, ...personalNavigation]
   const pageTitle = location.pathname === '/' ? 'Home' : allNav.find((item) => item.to === location.pathname)?.label ?? 'Workspace'
+  useEffect(() => { document.title = `${pageTitle} | All For One` }, [pageTitle])
 
   return <div className={`app-frame ${collapsed ? 'is-collapsed' : ''}`}>
+    <a className="skip-link" href="#main-content">Skip to main content</a>
     {mobileOpen && <button className="mobile-scrim visible" aria-label="Close navigation" onClick={() => setMobileOpen(false)} />}
     <aside className={`sidebar ${mobileOpen ? 'mobile-open' : ''}`} aria-label="Main navigation">
       <div className="brand-row">
@@ -88,7 +91,7 @@ function App() {
           <button className="top-avatar" onClick={() => navigate('/about')} aria-label="Open profile">S</button>
         </div>
       </header>
-      <div className="page-content"><Routes>
+      <div className="page-content" id="main-content" tabIndex={-1}><Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/projects" element={<ProjectsPage />} />
         <Route path="/projects/:slug" element={<ProjectPage />} />
@@ -150,7 +153,7 @@ function HomePage() {
       <div className="stack-card panel"><div className="stack-card-top"><div><Eyebrow>THE TOOLBOX</Eyebrow><h2>Tools of the trade</h2></div><span className="stack-orbit">✳</span></div><div className="skill-list">{['TypeScript', 'React', 'Python', 'PostgreSQL', 'Node.js', 'GitHub Actions', 'FastAPI', 'Data visualization'].map((skill, i) => <span className="skill-pill" key={skill}><i className={`skill-dot skill-${i % 4}`} />{skill}</span>)}</div><p className="demo-caption"><span className="demo-dot" />Editable skills overview · sample content</p></div>
     </section>
     <section className="assistant-home-link"><span className="assistant-home-icon"><Bot size={17} /></span><div><strong>Need a quick tour?</strong><span>Ask the site guide about the projects, roadmap, setup, or enterprise chatbot tutorial.</span></div><button className="text-button" onClick={() => navigate('/assistant')}>Ask the guide <ArrowRight size={14} /></button></section>
-    <section className="github-strip"><div className="github-icon"><Github size={20} /></div><div><strong>Built in the open, one piece at a time.</strong><span>The source repository will be linked here when it’s published.</span></div><span className="github-status"><i />IN DEVELOPMENT</span></section>
+    <section className="github-strip"><div className="github-icon"><Github size={20} /></div><div><strong>Built in the open, one piece at a time.</strong><a href={repositoryUrl} target="_blank" rel="noreferrer">View the public source repository <ArrowUpRight size={12} /></a></div><span className="github-status"><i />PUBLIC REPOSITORY</span></section>
   </div>
 }
 
@@ -211,7 +214,7 @@ function SettingsPage({ theme, onToggleTheme }: { theme: Theme; onToggleTheme: (
 }
 
 function ContactPage() {
-  return <div className="content-page"><PageIntro eyebrow="SAY HELLO" title="Good work starts with a conversation." description="Add your preferred contact details and professional profile links here when you’re ready to share this portfolio." /><section className="contact-panel panel"><div className="contact-mark"><span className="brand-mark"><span /><span /><span /><span /></span></div><div><span className="detail-kicker">CONTACT DETAILS</span><h2>Your links, your way.</h2><p>Email, LinkedIn, and other professional links are intentionally left blank until you provide the right details.</p><div className="contact-chips"><span>Email · add your address</span><span>LinkedIn · add your profile</span><span>GitHub · repository pending</span></div></div></section></div>
+  return <div className="content-page"><PageIntro eyebrow="SAY HELLO" title="Good work starts with a conversation." description="Add your preferred contact details and professional profile links here when you’re ready to share this portfolio." /><section className="contact-panel panel"><div className="contact-mark"><span className="brand-mark"><span /><span /><span /><span /></span></div><div><span className="detail-kicker">CONTACT DETAILS</span><h2>Your links, your way.</h2><p>Email and LinkedIn details can be added when you’re ready. The public GitHub repository is available now.</p><div className="contact-chips"><span>Email · add your address</span><span>LinkedIn · add your profile</span><a href={repositoryUrl} target="_blank" rel="noreferrer">GitHub · All For One <ArrowUpRight size={12} /></a></div></div></section></div>
 }
 
 function NotFound() {
